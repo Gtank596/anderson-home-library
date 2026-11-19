@@ -1,0 +1,17 @@
+﻿Shelf,Book row,Catalog title,Audit finding / action,Status,Source,_source_row
+G10,240,The Templeton Twins Have an Idea,Owner confirms one Templeton Twins book only (Book 1). No additional volumes should be counted.,Resolved — owner confirmed,Current photo / owner statement,2
+G10,236,The Multiplying Menace,"Different series, listed separately; not another Templeton Twins volume.",Distinct series — retain,Existing book record,3
+P13,167,As You Wish: Inconceivable Tales from the Making of The Princess Bride,"Cover photo confirms The Princess Bride by William Goldman (paperback), replacing mistaken Cary Elwes memoir.",Resolved — owner confirmed,Current photo / owner statement,4
+G33,487,The New English Dictionary,Owner confirms The New English Dictionary is separate from Sophia's USAA employee manual.,Resolved — owner confirmed,Current photo / owner statement,5
+G06,189,365 Days of Prayers for Women,Title in photo/catalog may differ from similarly named published 365 Days of Prayer for Women. Inspect exact front cover / ISBN before changing.,Exact-edition check,Catalog comparison,6
+G08,209,Layman’s Bible Dictionary,Publisher Barbour owner-confirmed; editor/edition not yet established.,Optional edition check,Catalog comparison,7
+G31,458,The History of the Middle East Wars,Author remains blank; confirm from title page instead of assigning a guess.,Needs author confirmation,Photo/user context + inventory,8
+G11,261,The Great Book of Wordsearch,Author listed Unverified. Check imprint and exact title from cover.,Needs title/creator confirmation,Photo/user context + inventory,9
+G08,208,Worship His Majesty,Author/creator field missing; check title page if individual credit is desired.,Optional creator check,Catalog comparison,10
+P15,173,Avatar: The Last Airbender — The Lost Adventures / Team Avatar Tales,Owner confirms The Lost Adventures and Team Avatar Tales are two distinct physical volumes; split inventory rows.,Resolved — owner confirmed,Current photo / owner statement,11
+G05,175,Skyward (2 copies listed),Two copies recorded at rows 175–176; confirm both physically present and differentiate binding.,Duplicate-copy check,Catalog comparison,12
+G30,449,The Diabolic (2 copies listed),Two copies recorded at rows 449–450; confirm actual duplicates vs accidental duplicate.,Duplicate-copy check,Catalog comparison,13
+P10,73,Flashback (2 copies listed),Two copies at rows 73 and 75; check bindings.,Duplicate-copy check,Catalog comparison,14
+P11,77,Unlocked (2 copies listed),Two copies at rows 77 and 81; check bindings.,Duplicate-copy check,Catalog comparison,15
+G06,196,God's Big Plan and You: The Holy Bible,"Owner confirms a children’s NIrV Bible; keep as Bible edition/title, not book plus separate Bible.",Owner-confirmed; retained,Photo/user context + inventory,16
+Missing after move,563,The Twin,"Catalogued as missing after move, not presently located. Do not count as verified on-shelf.",Owner-confirmed missing,Photo/user context + inventory,17
