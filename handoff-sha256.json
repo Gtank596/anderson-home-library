@@ -1,0 +1,22 @@
+{
+  "handoff-2026-11-21/catalog/Anderson_Home_Library_Photo_Confirmed.xlsx": "71a234ffd1c6764b541e4d8792a0906c367897d42f77ee76a1c3c04581968b69",
+  "handoff-2026-11-21/catalog/audit_corrections.csv": "841f3177997b9148a756ea7b1e446e6dc1f52f7bb4bdbb8233fb49f50f0dbbba",
+  "handoff-2026-11-21/catalog/author_title_audit.csv": "08ded51bd91f891801dfd12a30cfce198ad6c7625fe43c842eb03c44adfe54eb",
+  "handoff-2026-11-21/catalog/author_title_fixes.csv": "0b2fd27d4f0754d3a2111e6256bbc7679c311ff9057893da0881b30d12664166",
+  "handoff-2026-11-21/catalog/binding_audit.csv": "ae2b2d043eff723f3b755c5cc6d8173bb8e83c816abc3d7303fadda410107795",
+  "handoff-2026-11-21/catalog/books.csv": "35326d9dc2a1f96f01da9109f0dbedeb8a001a9094d30f984751968009f407ba",
+  "handoff-2026-11-21/catalog/books.json": "70a435961b1839087e4f8bc0941695dbc159a2ad573ba012757de94a6d1a2d89",
+  "handoff-2026-11-21/catalog/christian_title_audit.csv": "80c0bfd9a95be075cc586786a71e5a1e7533c6862215ea776a9048c0392f93a3",
+  "handoff-2026-11-21/catalog/contributor_gaps.csv": "6fb4b13aae26f153bfb962a9e58d8126c19bbecb1f90fb0280a8a97a0582e51a",
+  "handoff-2026-11-21/catalog/identification_queue.csv": "331d79cf6dc371d35fd11630dd965fee0f65a8aa40fc6ddd4f94b2437a966565",
+  "handoff-2026-11-21/catalog/puzzles.csv": "e380e8a1e0002e7c5610094e0d4c7611d24d5e861faa45ffdfc0529823facef3",
+  "handoff-2026-11-21/catalog/readers_digest_verified.csv": "ac949ba8acb50e1944f6e8247bca8da2ad0642599db61116229d58d7a2548cd2",
+  "handoff-2026-11-21/catalog/reference_and_audits.json": "9ee3fa2711cd6bea2c81605f8170a8fa32f7024b666d1415beba9b053203d3fa",
+  "handoff-2026-11-21/catalog/title_audit_01.csv": "aae2cd13cc7f3434ea16933732d73b5a0c0bb05e4002933e1eea2892a04382e5",
+  "handoff-2026-11-21/display_and_edition_notes.csv": "8286aff15f9e126313f092a0d2bcc5e709ff49256874555684d0982a114fd85e",
+  "handoff-2026-11-21/owner_confirmed_details.csv": "c73aec81ad394d4028276aa5d0a3352971a7c8df27a67438f6e03c3a6bfcd230",
+  "handoff-2026-11-21/pretty_side/location_summary.csv": "c02b979c0bfd5ea2cc9bc83193233f289f081d2d524ce82aac7d6b39f05b17ab",
+  "handoff-2026-11-21/pretty_side/locations.csv": "f5f6f0f30acc9db7665c9b8c41a230d5975a415a7f383f64151e60acdedc520f",
+  "handoff-2026-11-21/pretty_side/locations.json": "b6f0e0b8b10a812dcf72fd2c1a8c48d2839e890de374c1c27941938aa9516afb",
+  "handoff-2026-11-21/README.md": "0c41139bda9dbc0e36134ad45afeebef99c3fd16c07d38d567c1d47b26d21779"
+}

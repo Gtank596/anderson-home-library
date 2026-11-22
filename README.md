@@ -1,6 +1,6 @@
 # Anderson Home Library
 
-A buildless, searchable catalog of 564 physical books. Open `index.html` in a modern browser, or serve this folder with `python -m http.server 8765` and visit http://localhost:8765. No installation or paid service is needed.
+A buildless, searchable catalog of 572 physical books. Open `index.html` in a modern browser, or serve this folder with `python -m http.server 8765` and visit http://localhost:8765. No installation or paid service is needed.
 
 ## Data preservation
 
@@ -20,7 +20,7 @@ Corrections & archives searches each original reference section and provides ori
 
 Edits, additions, and archives are stored in this browser's localStorage. **They do not update GitHub or sync between devices.** Use Export backup regularly. JSON backups include all records, archived copies, local change history, original catalog, and source audits. CSV export includes copy IDs and archived flags. Import accepts the app's version 1 JSON backups and previews changes before matching by copy ID; it never matches by title or removes records omitted from a backup.
 
-An archived copy remains in backups. To restore it, change its `deleted` flag to false in a JSON backup and import it after reviewing the preview. Original source files always remain available. If browser storage cannot be read, the app shows the original catalog and refuses to overwrite the damaged stored data.
+An archived copy remains in backups. To restore it, change its `deleted` flag to false in a JSON backup and import it after reviewing the preview. Original source files always remain available. If browser storage cannot be read, the app shows available catalog data and refuses to overwrite the damaged stored data.
 
 ## GitHub Pages
 
@@ -29,3 +29,14 @@ Publish from the `main` branch, `/ (root)` folder in Settings > Pages. All paths
 ## Checks
 
 With Node.js installed: `node tests.cjs`. Checks exercise the actual app logic with a minimal DOM stub: preservation, distinct physical-copy identities, unknown bindings, contained-work lookup, typo search, import validation, persistence and storage failure. Visual and interactive browser checks are separate.
+
+
+## November 21 inventory reconciliation
+
+The 564-copy original remains unchanged. Eight confirmed additions bring the physical inventory to 572. The complete supplied handoff is preserved in `handoff-source.zip`; extracted source files have SHA-256 hashes in `handoff-sha256.json`. Run `python reconcile.py` to rebuild the overlay from the original and dated sources, then `node tests.cjs` to verify it.
+
+`handoff.js` and `reconciliation.json` preserve 139 current Pretty Side placements, field-by-field before/after values, unresolved questions, and direct owner confirmations overriding the original 142-placement handoff. P18 has seven physical books. Reader’s Digest 1980 Vol. 2 is corrected to 1990 Vol. 2 without adding a copy; original contained-work references remain linked by source identity.
+
+Two current Skandia records represent the confirmed paperback at P15 and hardcover at P16. The two old row identities are retained with `historicalOnly: true` and excluded from physical counts. Their correspondence is explicitly unresolved. Exports retain these historical records and flag them separately. There are 574 total records but 572 physical copies. The red sprayed-edge Lord of the Rings is at P24; the blue omnibus stays separate.
+
+Browser upgrades first save a pre-update backup key, then merge changed fields only where personal values still equal the original baseline. Conflicting personal values, manual copies, archived flags, and history are preserved. Differences appear in Corrections & archives. The shelf map describes the confirmed November 21 inventory; personal edits may subsequently differ.
