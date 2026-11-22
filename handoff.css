@@ -1,6 +1,6 @@
 .shelf-map {margin:0 0 2rem;padding:1.25rem;border:1px solid var(--line,#d7d0c4);border-radius:16px}
 .shelf-map-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;align-items:start}
-.cubby {min-width:0;background:var(--paper,#fffaf1);border:1px solid #d7d0c4;border-radius:10px;padding:.8rem}
+.cubby {min-width:0;background:var(--panel,#1d1f28);border:1px solid var(--line,#383944);border-radius:10px;padding:.8rem}
 .cubby summary {cursor:pointer;font-weight:700;min-height:44px;overflow-wrap:anywhere}
 .cubby summary span {display:block;font-size:.8rem;font-weight:400;margin-top:.3rem}
 .cubby ol {padding-left:1.4rem}.cubby li {margin-bottom:1rem;overflow-wrap:anywhere}
