@@ -22,3 +22,6 @@ footer details {margin:1rem 0}
 #loan-list,#wish-list {list-style:none;padding:0}
 #loan-list li,#wish-list li {padding:1rem 0;border-bottom:1px solid var(--line)}
 #loan-notice:not(:empty) {color:var(--accent)}
+#store-scan,#catalog-scan {background:var(--accent);color:var(--bg);font-weight:650}
+#store-scan {min-height:48px}
+@media(max-width:760px){#store-scan {width:100%}}
