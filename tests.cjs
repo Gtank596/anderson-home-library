@@ -50,3 +50,20 @@ assert.equal(run("state.records.filter(r=>r.historicalOnly).length"),2);
 assert.equal(run("active().some(r=>r.id==='source-row-34'||r.id==='source-row-52')"),false);
 assert.equal(run("active().find(r=>r.id==='inventory-2026-11-21-skandia-hardcover').data['Shelf Code']"),'P16');
 assert.equal(run("upgraded.records.filter(r=>!r.historicalOnly).length"),573);
+
+vm.runInContext(fs.readFileSync('reading.js','utf8'),context);
+const titan = run("seriesGuide(active(),'Attack on Titan')");
+assert.equal(titan.rows.length,34);
+assert.equal(titan.rows[0][1].length,0);
+assert.match(titan.rows[3][1][0].data.Title,/Omnibus 2/);
+assert.equal(titan.rows[3][1][0].id,titan.rows[5][1][0].id);
+assert.equal(run("seriesGuide(active(),'Haikyu!!').rows.filter(([,copies])=>copies.length).length"),45);
+assert.equal(run("tonightPicks(active(),'New reader','',false).length"),0);
+assert.equal(run("tonightPicks(active(),'New reader','',true).length"),3);
+assert.equal(run(`(()=>{
+  const a={id:'a',data:{Title:'One story',Author:'One author',Genre:'Fantasy'},readers:[{name:'Ann',status:'Finished',note:'Loved it'}]};
+  const b={id:'b',data:{...a.data}};
+  return tonightPicks([a,b],'ann','Fantasy',true).length===0 &&
+    tonightPicks([a,b],'Sam','Fantasy',true)[0].notes[0].note==='Loved it';
+})()`),true);
+console.log('PASS: series gaps, omnibus membership, reader status, family recommendations and duplicate editions.');

@@ -18,9 +18,15 @@ Corrections & archives searches each original reference section and provides ori
 
 ## Personal edits and backups
 
-Edits, additions, and archives are stored in this browser's localStorage. **They do not update GitHub or sync between devices.** Use Export backup regularly. JSON backups include all records, archived copies, local change history, original catalog, and source audits. CSV export includes copy IDs and archived flags. Import accepts the app's version 1 JSON backups and previews changes before matching by copy ID; it never matches by title or removes records omitted from a backup.
+Edits, additions, and archives are stored in this browser's localStorage. To sync across devices, connect Shared updates in the footer. Use Export backup regularly. JSON backups include all records, archived copies, local change history, original catalog, and source audits. CSV export includes copy IDs and archived flags. Import accepts the app's version 1 JSON backups and previews changes before matching by copy ID; it never matches by title or removes records omitted from a backup.
 
 An archived copy remains in backups. To restore it, change its `deleted` flag to false in a JSON backup and import it after reviewing the preview. Original source files always remain available. If browser storage cannot be read, the app shows available catalog data and refuses to overwrite the damaged stored data.
+
+## Reading room and family sync
+
+Open Reading room to browse numbered series and find up to three titles for a reader and genre. Open any copy to save a reader's status or recommendation. Untouched books have unknown status. The picker labels them and lets you exclude them. Series guides use catalog numbering and confirmed omnibus ranges. Haikyu!! and Attack on Titan include publisher-confirmed main-series endpoints.
+
+For shared updates, initialize a separate private GitHub repository with a README, invite family contributors, and have each contributor create a fine-grained token limited to that repository with Contents read/write permission. Open Shared updates in the footer on each device and connect using the same owner/repository and that person's token. Tokens stay in tab memory until disconnect or reload. Each visible connected tab checks every 30 seconds. Sync now checks immediately and lets you resolve divergent edits. Offline edits remain in browser storage. The private file stores changed copies and history. The public site still runs without setup. GitHub Pages visitors see the published base catalog until they connect. GitHub's inline file limit bounds shared history size. Export JSON backups as usual.
 
 ## GitHub Pages
 

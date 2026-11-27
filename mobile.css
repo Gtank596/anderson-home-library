@@ -10,7 +10,7 @@ dialog { max-height: 90dvh; overscroll-behavior: contain; }
   .brand { font-size: 32px; gap: .6rem; }
   .brand span { font-size: 11px; }
   header > button { margin-left: auto; font-size: .875rem; padding: .5rem .65rem; }
-  nav { display: grid; grid-template-columns: 1fr 1fr 1.3fr; flex-basis: 100%; width: 100%; gap: .2rem; overflow: visible; }
+  nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); flex-basis: 100%; width: 100%; gap: .2rem; overflow: visible; }
   nav button { min-width: 0; padding: .5rem .25rem; font-size: .875rem; line-height: 1.3; white-space: normal; }
   button, .import-button, summary { min-height: 44px; touch-action: manipulation; }
   input:not([type=checkbox]), select, textarea { font-size: 16px; min-height: 46px; }
