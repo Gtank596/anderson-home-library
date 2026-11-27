@@ -34,11 +34,76 @@ function searchBookstore(records,isbn,title,author) {
   return {label:copies.length?'Possible title matches. Compare the binding and edition below.':'No title match in the catalog. Try a shorter title or leave the author blank.',copies};
 }
 function showBookstoreResults() {
-  const {label,copies}=searchBookstore(active(),$('#store-isbn').value,$('#store-title').value,$('#store-author').value);
+  const records=active(), title=$('#store-title').value, author=$('#store-author').value;
+  let {label,copies}=searchBookstore(records,$('#store-isbn').value,title,author);
+  if (!copies.length && filledEdition && title===filledEdition.title && author) {
+    copies=records.filter(r=>wordMatch(title,r.data.Title));
+    if (copies.length) label='Similar titles on your shelves. Check the author and edition.';
+  }
   $('#store-status').textContent=label;
   $('#store-results').innerHTML=copies.map(r=>'<li>'+copyLink(r)+'<p>'+
     [r.data.Author,binding(r.data),r.data['Edition / Cover']].filter(Boolean).map(esc).join(' Â· ')+'</p></li>').join('');
 }
+
+// Only an explicit scan or search starts a network lookup. Catalog redraws stay local.
+const editionCache=new Map();
+let lookupRequest=null, filledEdition=null;
+function cancelLookup() {
+  lookupRequest?.abort();
+  lookupRequest=null;
+}
+function clearEdition(clearFields=false) {
+  cancelLookup();
+  if (clearFields && filledEdition) {
+    if ($('#store-title').value===filledEdition.title) $('#store-title').value='';
+    if ($('#store-author').value===filledEdition.author) $('#store-author').value='';
+  }
+  filledEdition=null;
+  $('#store-edition').textContent='';
+}
+async function checkScannedBook() {
+  cancelLookup();
+  const isbn=canonicalISBN($('#store-isbn').value);
+  showBookstoreResults();
+  if (!isbn || active().some(r=>canonicalISBN(r.data.ISBN)===isbn) || $('#store-title').value.trim()) return;
+  const request=new AbortController();
+  lookupRequest=request;
+  const timer=setTimeout(()=>request.abort(),9000);
+  try {
+    let edition=editionCache.get(isbn);
+    if (!edition) {
+      $('#store-status').textContent='Looking up this ISBN on Open Library…';
+      const key='ISBN:'+isbn;
+      const query=new URLSearchParams({bibkeys:key,format:'json',jscmd:'data'});
+      const response=await fetch('https://openlibrary.org/api/books?'+query,{
+        signal:request.signal,credentials:'omit',referrerPolicy:'no-referrer'
+      });
+      if (!response.ok) throw Error('Lookup unavailable');
+      const book=(await response.json())[key];
+      if (lookupRequest!==request) return;
+      if (!book || typeof book.title!=='string' || !book.title.trim()) {
+        $('#store-status').textContent='Open Library has no title for this ISBN. Enter a title below to check your shelves.';
+        return;
+      }
+      edition={title:book.title.trim(),author:(Array.isArray(book.authors)?book.authors:[])
+        .map(a=>a?.name).filter(n=>typeof n==='string' && n.trim()).join(', ')};
+      editionCache.set(isbn,edition);
+    }
+    if (lookupRequest!==request) return;
+    filledEdition=edition;
+    $('#store-title').value=edition.title;
+    $('#store-author').value=edition.author;
+    $('#store-edition').textContent='Open Library · '+edition.title+(edition.author?' by '+edition.author:'');
+    showBookstoreResults();
+  } catch {
+    if (lookupRequest===request) $('#store-status').textContent='Open Library could not be reached. Try again or enter the title to check your shelves.';
+  } finally {
+    clearTimeout(timer);
+    if (lookupRequest===request) lookupRequest=null;
+  }
+}
+$('#store-isbn').oninput=()=>clearEdition(true);
+for (const id of ['#store-title','#store-author']) $(id).oninput=()=>clearEdition();
 
 // EAN-13 digits occupy seven modules each. Guard patterns and the ISBN
 // check digit reject spurious matches in ordinary camera frames.
@@ -93,6 +158,7 @@ function stopBookCamera() {
 }
 async function startBookCamera() {
   stopBookCamera();
+  clearEdition();
   const generation=scanGeneration, video=$('#store-video');
   $('#store-isbn').value='';$('#store-title').value='';$('#store-author').value='';
   $('#store-results').replaceChildren();
@@ -127,7 +193,7 @@ async function startBookCamera() {
         }
       }
       if (generation!==scanGeneration) return;
-      if (isbn) {stopBookCamera();$('#store-isbn').value=isbn;showBookstoreResults();return;}
+      if (isbn) {stopBookCamera();$('#store-isbn').value=isbn;void checkScannedBook();return;}
       scanTimer=setTimeout(()=>frame().catch(fail),200);
     }
     await frame();
@@ -138,7 +204,7 @@ async function startBookCamera() {
     $('#store-status').textContent='Camera unavailable. Enter the ISBN or search by title. Camera access requires a supported browser and permission.';
   }
 }
-$('#store-form').onsubmit=e=>{e.preventDefault();stopBookCamera();showBookstoreResults();};
+$('#store-form').onsubmit=e=>{e.preventDefault();stopBookCamera();void checkScannedBook();};
 $('#store-scan').onclick=startBookCamera;
 $('#store-stop').onclick=()=>{stopBookCamera();$('#store-status').textContent='Scan stopped.';};
 $('#store-results').onclick=e=>{const b=e.target.closest('[data-copy]');if(b){stopBookCamera();detail(b.dataset.copy);}};

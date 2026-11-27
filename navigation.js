@@ -18,7 +18,7 @@ function selectView(name) {
   $('#reading').hidden=view!=='reading';
   $('#loans').hidden=view!=='loans';
   $('#history').hidden=view!=='history';
-  if (view!=='store') stopBookCamera();
+  if (view!=='store') {stopBookCamera();cancelLookup();}
   if (view==='reading') {updateReadingMenus();drawSeries();drawPicks();}
   if (view==='history') renderHistory();
   render();
