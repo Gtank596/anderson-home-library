@@ -17,3 +17,8 @@ footer details {margin:1rem 0}
 .profile-shelves {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.75rem}
 .profile-shelves section {padding:1rem;background:var(--panel);border:1px solid var(--line);border-radius:.5rem}
 .profile-shelves h4,.profile-shelves p {margin:.3rem 0}
+#lend-form,#wish-form {display:grid;gap:.75rem;max-width:36rem;margin:.8rem 0}
+#lend-form label,#wish-form label {display:grid;gap:.2rem}
+#loan-list,#wish-list {list-style:none;padding:0}
+#loan-list li,#wish-list li {padding:1rem 0;border-bottom:1px solid var(--line)}
+#loan-notice:not(:empty) {color:var(--accent)}

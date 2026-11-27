@@ -4,8 +4,8 @@
   const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
   const defaults = new Map(HANDOFF.records.map(r=>[r.id,r]));
   const notice = message => { $('#sync-status').textContent=message; };
-  function snapshot(records, history) {
-    return {version:1,catalogRevision:HANDOFF.revision,records:records.filter(r=>!same(defaults.get(r.id),r)),history};
+  function snapshot(records, history, wishes=[]) {
+    return {...(wishes.length?{wishes}:{}),version:1,catalogRevision:HANDOFF.revision,records:records.filter(r=>!same(defaults.get(r.id),r)),history};
   }
   const empty = () => snapshot([],[]);
   function unpack(snapshot) {
@@ -22,6 +22,7 @@
       return [...new Set([...mine.keys(),...theirs.keys()])].map(name=>
         mergeValue(before.get(name),mine.get(name),theirs.get(name),label+' / '+name,resolve)).filter(Boolean);
     }
+    if (label.endsWith(' / loan')) return resolve(label,local,remote);
     const plain = v => v && typeof v==='object' && !Array.isArray(v);
     if (plain(local) && plain(remote) && plain(base)) {
       return Object.fromEntries([...new Set([...Object.keys(local),...Object.keys(remote)])].map(key=>
@@ -73,11 +74,15 @@
       const records=[...new Set([...local.keys(),...incoming.keys()])].map(id=>mergeValue(base.get(id),local.get(id),incoming.get(id),
         (local.get(id)?.data.Title || id)+' ('+id+')',resolve)).filter(Boolean);
       const history=[...new Map([...remote.history,...state.history].map(h=>[JSON.stringify(h),h])).values()];
-      const shared=snapshot(records,history);
+      const byId=items=>new Map((items||[]).map(item=>[item.id,item]));
+      const baseWishes=byId(state.syncBase?.wishes), localWishes=byId(state.wishes), remoteWishes=byId(remote.wishes);
+      const wishes=[...new Set([...localWishes.keys(),...remoteWishes.keys()])].map(id=>mergeValue(baseWishes.get(id),
+        localWishes.get(id),remoteWishes.get(id),'Wish '+(localWishes.get(id)?.title||remoteWishes.get(id)?.title||id),resolve)).filter(Boolean);
+      const shared=snapshot(records,history,wishes);
       const content=encode(shared);
       if (content.length>1320000) throw Error('Shared history exceeds the supported file size. Export a backup.');
       const changes=!same(shared,remote);
-      const next={...state,records,history,syncRepo:s.repo,syncBase:structuredClone(remote)};
+      const next={...state,records,history,wishes,syncRepo:s.repo,syncBase:structuredClone(remote)};
       if (!same(state,next)) {
         if (!commit(next)) throw Error('Browser storage could not save the merged catalog.');
         options(); render();

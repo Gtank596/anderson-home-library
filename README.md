@@ -51,3 +51,8 @@ Browser upgrades first save a pre-update backup key, then merge changed fields o
 Open **Bookstore mode** to scan an ISBN barcode, enter an ISBN, or search by title and author. ISBN-10 and ISBN-13 equivalents match the same edition. A title match shows each active copy's binding, edition and shelf. Most initial records lack an ISBN. Open the copy and choose **Edit this copy** to add a verified ISBN. Camera scanning runs on your device and requires camera permission and a supported secure browsing context. Hold the main book barcode horizontally with the bars upright.
 
 In **Reading room**, choose or enter a reader and select **Open profile**. Open any book, select **Want to read**, **Reading** or **Finished**, and save the reader note. Each profile lists its books and recommendations. **Unread** remains available for the nightly picker. Reader lists and notes travel with JSON backups and family sync. Use the updated app on each family device.
+## Loans and book hunting
+
+Open a physical copy and select **Lend this copy** to record the borrower and checkout date. **Out on loan** lists outstanding copies. Mark one returned to see its home shelf. Checkout and return events appear in the copy's history.
+
+In **Bookstore mode**, use **Add a wish** to record the title, author, edition you want and why. Mark a book found while shopping. Select **Show found books** to edit it or put it back on the list. Purchases can be cataloged separately using **Add a physical copy**. Loans and wishes travel with the JSON backup and private family sync. Use the updated app on all participating devices.

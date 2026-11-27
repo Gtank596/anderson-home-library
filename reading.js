@@ -56,7 +56,7 @@ function tonightPicks(records, reader, genre, includeUnknown) {
     }).filter(Boolean);
     if (statuses.some(s=>!['unread','want to read','to read'].includes(s))) continue;
     if (!statuses.length && !includeUnknown) continue;
-    const record = copies.find(r => !genre || genresOf(r.data).includes(genre));
+    const record = copies.find(r => !r.loan && (!genre || genresOf(r.data).includes(genre)));
     if (record) choices.push({record, known:statuses.length>0, notes:copies.flatMap(r=>r.readers||[]).filter(n=>n.note)});
   }
   for (let i = choices.length-1; i>0; i--) {
@@ -66,7 +66,7 @@ function tonightPicks(records, reader, genre, includeUnknown) {
   return choices.slice(0,3);
 }
 function copyLink(r) {
-  return '<button class="copy-link" data-copy="'+esc(r.id)+'">'+esc(r.data.Title)+' · '+esc(r.data['Shelf Code'] || 'Shelf unknown')+'</button>';
+  return '<button class="copy-link" data-copy="'+esc(r.id)+'">'+esc(r.data.Title)+' · '+(r.loan?'Out on loan':esc(r.data['Shelf Code'] || 'Shelf unknown'))+'</button>';
 }
 function drawSeries() {
   const name = $('#series-name').value;

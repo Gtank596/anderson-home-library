@@ -82,3 +82,12 @@ assert.equal(run(`(()=>{
     profileLists(records,'Ben').lists.get('Finished').length===1 && profileLists(records,'Ben').notes.length===0;
 })()`),true);
 console.log('PASS: ISBN validation and matching, edition fallback, personal reading lists.');
+const wished={id:'test-wish',title:'Winter book',author:'',edition:'Matching hardcover',reason:'Complete set',found:false};
+context.wished=wished;
+assert.equal(run('validateBackup({...state,wishes:[wished]}).wishes[0].edition'),'Matching hardcover');
+assert.throws(()=>run('validateBackup({...state,wishes:[wished,wished]})'),/wish list/);
+assert.equal(run('mergeImportedWishes([wished],[{...wished,found:true}])[0].found'),true);
+assert.equal(run("validLoanDate('2026-02-30')"),false);
+assert.equal(run("validLoanDate('2024-02-29')"),true);
+assert.equal(run("tonightPicks([{data:{Title:'Loaned'},loan:{borrower:'Sam',date:'2026-03-02'}}],'','',true).length"),0);
+console.log('PASS: loan dates, availability, wish list validation and backup merging.');
