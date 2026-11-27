@@ -88,7 +88,7 @@ function drawPicks() {
 function updateReadingMenus() {
   const records = active();
   const menus = [['#series-name',records.map(r=>r.data.Series)],['#pick-genre',records.flatMap(r=>genresOf(r.data))],
-    ['#reader-names',records.flatMap(r=>[r.data['Owned By'],...(r.readers||[]).map(n=>n.name)])]];
+    ['#reader-names',[...records.flatMap(r=>[r.data['Owned By'],...(r.readers||[]).map(n=>n.name)]),...state.history.filter(h=>h?.action==='create reader' && typeof h.reader==='string').map(h=>h.reader)]]];
   for (const [id,values] of menus) {
     const select = $(id), previous = select.value;
     select.innerHTML = (id==='#pick-genre'?'<option value="">Any genre</option>':'')+
@@ -99,6 +99,7 @@ function updateReadingMenus() {
 function readerForm(id) {
   const form = $('#reader-form');
   const record = state.records.find(r=>r.id===id);
+  updateReadingMenus();
   form.elements.reader.value = $('#reader-name').value;
   function loadEntry() {
     const entry = (record.readers || []).find(n=>readerKey(n.name)===readerKey(form.elements.reader.value));
@@ -117,7 +118,7 @@ function readerForm(id) {
     const status = form.elements.status.value, note = form.elements.note.value.trim();
     if (status || note) copy.readers.push({name,status,note});
     next.history.push({id,action:'reader note',at:new Date().toISOString(),before,after:copy.readers});
-    if (commit(next)) { $('#reader-name').value=name; updateReadingMenus(); drawPicks(); detail(id); }
+    if (commit(next)) { $('#reader-name').value=name; updateReadingMenus(); drawProfile(); drawPicks(); detail(id); }
   };
 }
 document.querySelector('#reading').onclick = e => {
@@ -127,6 +128,41 @@ document.querySelector('#reading').onclick = e => {
 $('#series-name').onchange=drawSeries;
 $('#pick-again').onclick=drawPicks;
 $('#pick-genre').onchange=drawPicks;
-$('#reader-name').onchange=drawPicks;
+$('#reader-name').onchange=()=>{drawProfile();drawPicks();};
 $('#unknown-status').onchange=drawPicks;
 
+function profileLists(records,name) {
+  const lists=new Map([['Want to read',[]],['Reading',[]],['Finished',[]]]);
+  const notes=[];
+  for (const record of records) {
+    const entry=(record.readers||[]).find(n=>readerKey(n.name)===readerKey(name));
+    const imported=readerKey(record.data['Owned By'])===readerKey(name) ? record.data['Read Status'] : '';
+    const status=entry?.status || imported;
+    const shelf=[...lists.keys()].find(key=>readerKey(key)===readerKey(status));
+    if (shelf) lists.get(shelf).push(record);
+    if (entry?.note) notes.push({record,note:entry.note});
+  }
+  for (const list of lists.values()) list.sort((a,b)=>String(a.data.Title).localeCompare(String(b.data.Title)));
+  return {lists,notes};
+}
+function drawProfile() {
+  const name=$('#reader-name').value.trim(), panel=$('#profile-lists');
+  if (!name) {panel.textContent='Choose a reader to see their lists and recommendations.';return;}
+  const {lists,notes}=profileLists(active(),name);
+  panel.innerHTML='<h3>'+esc(name)+'</h3><div class="profile-shelves">'+[...lists].map(([label,list])=>
+    '<section><h4>'+label+' ('+list.length+')</h4>'+(list.length?'<ul>'+list.map(r=>'<li>'+copyLink(r)+'</li>').join('')+'</ul>':'<p>No books yet.</p>')+'</section>'
+  ).join('')+'</div><p>Open a book and save a reading status to update these lists.</p>'+
+    (notes.length?'<h4>Family recommendations</h4><ul>'+notes.map(({record,note})=>'<li>'+copyLink(record)+' '+esc(note)+'</li>').join('')+'</ul>':'');
+}
+$('#profile-form').onsubmit=e=>{
+  e.preventDefault();
+  const name=$('#reader-name').value.trim();
+  if (name && !state.history.some(h=>h?.action==='create reader' && readerKey(h.reader)===readerKey(name))) {
+    const next=structuredClone(state);
+    next.history.push({action:'create reader',reader:name,at:new Date().toISOString()});
+    if (!commit(next)) return;
+  }
+  try {localStorage.setItem(KEY+'-selected-reader',name);} catch {}
+  updateReadingMenus();drawProfile();drawPicks();
+};
+try {$('#reader-name').value=localStorage.getItem(KEY+'-selected-reader') || '';} catch {}

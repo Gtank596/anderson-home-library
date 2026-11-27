@@ -9,3 +9,11 @@
 #reader-form label,#sync-form label {display:grid;gap:.25rem}
 #reading input[type=checkbox] {width:auto}
 footer details {margin:1rem 0}
+#store-form,#profile-form {display:grid;gap:.8rem;max-width:38rem;margin:1rem 0}
+#store-form label,#profile-form label {display:grid;gap:.25rem}
+#store-video {display:block;width:100%;max-width:35rem;max-height:45vh;margin:.75rem 0;background:#14151b}
+#store-results {padding-left:0;list-style:none}
+#store-results li {border-bottom:1px solid var(--line);padding:.5rem 0}
+.profile-shelves {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.75rem}
+.profile-shelves section {padding:1rem;background:var(--panel);border:1px solid var(--line);border-radius:.5rem}
+.profile-shelves h4,.profile-shelves p {margin:.3rem 0}

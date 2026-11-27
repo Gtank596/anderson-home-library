@@ -67,3 +67,18 @@ assert.equal(run(`(()=>{
     tonightPicks([a,b],'Sam','Fantasy',true)[0].notes[0].note==='Loved it';
 })()`),true);
 console.log('PASS: series gaps, omnibus membership, reader status, family recommendations and duplicate editions.');
+context.document.addEventListener=()=>{};
+context.window={addEventListener(){}};
+vm.runInContext(fs.readFileSync('bookstore.js','utf8'),context);
+assert.equal(run("canonicalISBN('ISBN-10: 0-306-40615-2')"),'9780306406157');
+assert.equal(run("canonicalISBN('0-8044-2957-X')"),'9780804429573');
+assert.equal(run("canonicalISBN('9780306406158')"),'');
+assert.equal(run("searchBookstore(active(),'9781424558155','','').copies.length"),1);
+assert.equal(run("searchBookstore(active(),'9780306406157','battle for skandia','flanagan').copies.length"),2);
+assert.equal(run("searchBookstore(active(),'9780306406157','','').copies.length"),0);
+assert.equal(run(`(()=>{
+  const records=[{data:{Title:'Title'},readers:[{name:'Ann',status:'Want to read',note:'Try this'},{name:'Ben',status:'Finished',note:''}]}];
+  return profileLists(records,'ann').lists.get('Want to read').length===1 &&
+    profileLists(records,'Ben').lists.get('Finished').length===1 && profileLists(records,'Ben').notes.length===0;
+})()`),true);
+console.log('PASS: ISBN validation and matching, edition fallback, personal reading lists.');

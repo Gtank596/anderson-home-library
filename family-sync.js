@@ -16,6 +16,12 @@
   function mergeValue(base,local,remote,label,resolve) {
     if (same(local,remote) || same(remote,base)) return local;
     if (same(local,base)) return remote;
+    if (label.endsWith(' / readers') && [base,local,remote].every(v=>v===undefined || Array.isArray(v))) {
+      const byReader = entries => new Map((entries || []).map(entry=>[readerKey(entry.name),entry]));
+      const before=byReader(base), mine=byReader(local), theirs=byReader(remote);
+      return [...new Set([...mine.keys(),...theirs.keys()])].map(name=>
+        mergeValue(before.get(name),mine.get(name),theirs.get(name),label+' / '+name,resolve)).filter(Boolean);
+    }
     const plain = v => v && typeof v==='object' && !Array.isArray(v);
     if (plain(local) && plain(remote) && plain(base)) {
       return Object.fromEntries([...new Set([...Object.keys(local),...Object.keys(remote)])].map(key=>
