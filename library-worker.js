@@ -1,5 +1,5 @@
 'use strict';
-const cacheName='anderson-library-shell-discovery1';
+const cacheName='anderson-library-shell-checkout1';
 const home=new URL('index.html',self.registration.scope).href;
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const response=await fetch(home,{cache:'reload'});
