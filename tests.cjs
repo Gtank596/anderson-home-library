@@ -91,3 +91,19 @@ assert.equal(run("validLoanDate('2026-02-30')"),false);
 assert.equal(run("validLoanDate('2024-02-29')"),true);
 assert.equal(run("tonightPicks([{data:{Title:'Loaned'},loan:{borrower:'Sam',date:'2026-03-02'}}],'','',true).length"),0);
 console.log('PASS: loan dates, availability, wish list validation and backup merging.');
+vm.runInContext(fs.readFileSync('discovery.js','utf8'),context);
+assert.equal(run(`(()=>{
+  state.wishes=[{...wished,isbn:'0-306-40615-2'}];
+  return wishedTitles({ISBN:'9780306406157',Title:''}).length;
+})()`),1);
+assert.equal(run(`(()=>{
+  state.wishes[0].found=true;
+  return wishedTitles({ISBN:'9780306406157',Title:wished.title}).length;
+})()`),0);
+assert.equal(run(`(()=>{
+  const records=active(), titan=seriesGuide(records,'Attack on Titan');
+  const finished=titan.rows.find(([number])=>number==='4')[1];
+  const html=profileDiscoveries(records,'Test reader',finished);
+  return html.includes('Volume 7') && html.includes('Omnibus 3');
+})()`),true);
+console.log('PASS: wish ISBN equivalence, found wishes excluded, next readable omnibus.');

@@ -88,7 +88,7 @@ function drawPicks() {
 function updateReadingMenus() {
   const records = active();
   const menus = [['#series-name',records.map(r=>r.data.Series)],['#pick-genre',records.flatMap(r=>genresOf(r.data))],
-    ['#reader-names',[...records.flatMap(r=>[r.data['Owned By'],...(r.readers||[]).map(n=>n.name)]),...state.history.filter(h=>h?.action==='create reader' && typeof h.reader==='string').map(h=>h.reader)]]];
+    ['#reader-names',[...records.flatMap(r=>[r.data['Owned By'],...(r.readers||[]).map(n=>n.name)]),...state.history.filter(h=>['create reader','reader pick'].includes(h?.action) && typeof h.reader==='string').map(h=>h.reader)]]];
   for (const [id,values] of menus) {
     const select = $(id), previous = select.value;
     select.innerHTML = (id==='#pick-genre'?'<option value="">Any genre</option>':'')+
@@ -148,10 +148,11 @@ function profileLists(records,name) {
 function drawProfile() {
   const name=$('#reader-name').value.trim(), panel=$('#profile-lists');
   if (!name) {panel.textContent='Choose a reader to see their lists and recommendations.';return;}
-  const {lists,notes}=profileLists(active(),name);
+  const records=active(), {lists,notes}=profileLists(records,name);
   panel.innerHTML='<h3>'+esc(name)+'</h3><div class="profile-shelves">'+[...lists].map(([label,list])=>
     '<section><h4>'+label+' ('+list.length+')</h4>'+(list.length?'<ul>'+list.map(r=>'<li>'+copyLink(r)+'</li>').join('')+'</ul>':'<p>No books yet.</p>')+'</section>'
   ).join('')+'</div><p>Open a book and save a reading status to update these lists.</p>'+
+    profileDiscoveries(records,name,lists.get('Finished'))+
     (notes.length?'<h4>Family recommendations</h4><ul>'+notes.map(({record,note})=>'<li>'+copyLink(record)+' '+esc(note)+'</li>').join('')+'</ul>':'');
 }
 $('#profile-form').onsubmit=e=>{

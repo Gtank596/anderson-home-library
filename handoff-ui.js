@@ -31,7 +31,7 @@ function renderHandoff(){
     const code='P'+String(i+1).padStart(2,'0');
     const all=HANDOFF.placements.filter(x=>x.position===code);
     const rows=all.filter(x=>!query||norm(Object.values(x).join(' ')).includes(norm(query)));
-    return `<details class="cubby"><summary>${code} <span>${all.length} placements</span></summary><ol>${rows.map(x=>`<li ${x.sequence?`value="${x.sequence}"`:""}>${x.copy_id?`<button class="placement-link" data-copy="${esc(x.copy_id)}">${esc(x.title)}</button>`:`<strong>${esc(x.title)}</strong>`}<small>${esc(x.binding)}${x.sequence===null?' · within-cubby order unconfirmed':''}${x.edition_or_cover?' · '+esc(x.edition_or_cover):''}</small>${x.review?`<p class="small">${esc(x.review)}</p>`:''}</li>`).join('')||'<li>No search matches</li>'}</ol></details>`;
+    return `<details class="cubby" data-shelf="${code}"><summary>${code} <span>${all.length} placements</span></summary><ol>${rows.map(x=>`<li ${x.sequence?`value="${x.sequence}"`:""}>${x.copy_id?`<button class="placement-link" data-copy="${esc(x.copy_id)}">${esc(x.title)}</button>`:`<strong>${esc(x.title)}</strong>`}<small>${esc(x.binding)}${x.sequence===null?' · within-cubby order unconfirmed':''}${x.edition_or_cover?' · '+esc(x.edition_or_cover):''}</small>${x.review?`<p class="small">${esc(x.review)}</p>`:''}</li>`).join('')||'<li>No search matches</li>'}</ol></details>`;
   }).join('');
   $('#shelf-map-grid').querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>detail(b.dataset.copy));
   $('#handoff-review').innerHTML=HANDOFF.review.map(r=>`<details class="history-row"><summary>${esc(r.Position||'Catalog')} · ${esc(r.Title)}</summary>${dl(r)}</details>`).join('');

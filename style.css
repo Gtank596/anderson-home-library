@@ -25,3 +25,12 @@ footer details {margin:1rem 0}
 #store-scan,#catalog-scan {background:var(--accent);color:var(--bg);font-weight:650}
 #store-scan {min-height:48px}
 @media(max-width:760px){#store-scan {width:100%}}
+.copy-thumbnail {width:4.2rem;height:5.4rem;object-fit:contain;float:right;margin:.25rem}
+.edition-gallery {display:flex;gap:.75rem;flex-wrap:wrap}
+.edition-gallery a {display:grid;max-width:8rem}
+.edition-gallery img {width:100%;height:8rem;object-fit:contain}
+.photo-form,#attach-form,#send-pick {display:grid;gap:.75rem;max-width:36rem;margin:1rem 0}
+.photo-form label,#attach-form label,#send-pick label {display:grid;gap:.25rem}
+#attach-copy {max-width:100%;width:100%}
+.located-cubby {outline:3px solid var(--accent);outline-offset:3px}
+#scan-actions button,#saved-scans button {margin:.25rem}

@@ -53,24 +53,26 @@ $('#loan-list').onclick=e=>{
 function drawWishes() {
   const showFound=$('#wish-found').checked;
   const wishes=(state.wishes||[]).filter(w=>showFound || !w.found).sort((a,b)=>Number(a.found)-Number(b.found)||a.title.localeCompare(b.title));
-  $('#wish-list').innerHTML=wishes.map(w=>'<li><h3>'+esc(w.title)+(w.found?' · Found':'')+'</h3><p>'+esc([w.author,w.edition||'Any edition'].filter(Boolean).join(' · '))+'</p>'+
+  $('#wish-list').innerHTML=wishes.map(w=>'<li><h3>'+esc(w.title)+(w.found?' · Found':'')+'</h3><p>'+esc([w.author,w.edition||'Any edition',w.isbn].filter(Boolean).join(' · '))+'</p>'+
     (w.reason?'<p>'+esc(w.reason)+'</p>':'')+'<button data-edit="'+esc(w.id)+'">Edit wish</button> <button data-toggle="'+esc(w.id)+'">'+
     (w.found?'Look for again':'Mark found')+'</button></li>').join('') || '<li>No books on this list yet.</li>';
 }
 function editWish(id) {
   const item=(state.wishes||[]).find(w=>w.id===id), form=$('#wish-form');
   $('#wish-heading').textContent=item?'Edit wish':'Add a wish';
-  form.reset();
-  for (const key of ['title','author','edition','reason']) form.elements[key].value=item?.[key] || '';
+  form.reset();form.elements.isbn.setCustomValidity('');form.elements.isbn.oninput=()=>form.elements.isbn.setCustomValidity('');
+  for (const key of ['title','author','edition','reason','isbn']) form.elements[key].value=item?.[key] || '';
   if (!item) {form.elements.title.value=$('#store-title').value.trim();form.elements.author.value=$('#store-author').value.trim();}
   form.onsubmit=e=>{
     e.preventDefault();
-    const fields=Object.fromEntries(['title','author','edition','reason'].map(k=>[k,form.elements[k].value.trim()]));
+    const fields=Object.fromEntries(['title','author','edition','reason','isbn'].map(k=>[k,form.elements[k].value.trim()]));
+    if (fields.isbn && !canonicalISBN(fields.isbn)) {form.elements.isbn.setCustomValidity('Enter a valid ISBN or leave this blank.');form.elements.isbn.reportValidity();return;}
+    fields.isbn=canonicalISBN(fields.isbn);
     if (!fields.title) {form.elements.title.focus();return;}
     const next=structuredClone(state);
     const wish={...fields,id:item?.id || crypto.randomUUID(),found:item?.found || false};
     next.wishes=mergeImportedWishes(next.wishes,[wish]);
-    if (commit(next)) {$('#wish-dialog').close();drawWishes();}
+    if (commit(next)) {$('#wish-dialog').close();render();}
   };
   $('#wish-dialog').showModal();
 }
@@ -81,6 +83,6 @@ $('#wish-list').onclick=e=>{
   if (button?.dataset.edit) editWish(button.dataset.edit);
   if (button?.dataset.toggle) {
     const next=structuredClone(state), wish=next.wishes.find(w=>w.id===button.dataset.toggle);
-    if (wish) {wish.found=!wish.found;if (commit(next))drawWishes();}
+    if (wish) {wish.found=!wish.found;if (commit(next))render();}
   }
 };

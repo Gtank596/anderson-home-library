@@ -40,8 +40,9 @@ function showBookstoreResults() {
     copies=records.filter(r=>wordMatch(title,r.data.Title));
     if (copies.length) label='Similar titles on your shelves. Check the author and edition.';
   }
+  renderScanActions(copies);
   $('#store-status').textContent=label;
-  $('#store-results').innerHTML=copies.map(r=>'<li>'+copyLink(r)+'<p>'+
+  $('#store-results').innerHTML=copies.map(r=>'<li>'+copyThumbnail(r.id)+copyLink(r)+'<p>'+
     [r.data.Author,binding(r.data),r.data['Edition / Cover']].filter(Boolean).map(esc).join(' Â· ')+'</p></li>').join('');
 }
 
@@ -66,13 +67,14 @@ async function checkScannedBook() {
   const isbn=canonicalISBN($('#store-isbn').value);
   showBookstoreResults();
   if (!isbn || active().some(r=>canonicalISBN(r.data.ISBN)===isbn) || $('#store-title').value.trim()) return;
+  if (navigator.onLine===false) {$('#store-status').textContent='Offline. Save this ISBN for lookup later, or enter a title to check your shelves.';return;}
   const request=new AbortController();
   lookupRequest=request;
   const timer=setTimeout(()=>request.abort(),9000);
   try {
     let edition=editionCache.get(isbn);
     if (!edition) {
-      $('#store-status').textContent='Looking up this ISBN on Open Library…';
+      $('#store-status').textContent='Looking up this ISBN on Open Libraryâ€¦';
       const key='ISBN:'+isbn;
       const query=new URLSearchParams({bibkeys:key,format:'json',jscmd:'data'});
       const response=await fetch('https://openlibrary.org/api/books?'+query,{
@@ -86,14 +88,14 @@ async function checkScannedBook() {
         return;
       }
       edition={title:book.title.trim(),author:(Array.isArray(book.authors)?book.authors:[])
-        .map(a=>a?.name).filter(n=>typeof n==='string' && n.trim()).join(', ')};
+        .map(a=>a?.name).filter(n=>typeof n==='string' && n.trim()).join(', '),binding:typeof book.physical_format==='string'?book.physical_format:''};
       editionCache.set(isbn,edition);
     }
     if (lookupRequest!==request) return;
     filledEdition=edition;
     $('#store-title').value=edition.title;
     $('#store-author').value=edition.author;
-    $('#store-edition').textContent='Open Library · '+edition.title+(edition.author?' by '+edition.author:'');
+    $('#store-edition').textContent='Open Library Â· '+edition.title+(edition.author?' by '+edition.author:'');
     showBookstoreResults();
   } catch {
     if (lookupRequest===request) $('#store-status').textContent='Open Library could not be reached. Try again or enter the title to check your shelves.';

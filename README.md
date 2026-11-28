@@ -56,3 +56,11 @@ In **Reading room**, choose or enter a reader and select **Open profile**. Open 
 Open a physical copy and select **Lend this copy** to record the borrower and checkout date. **Out on loan** lists outstanding copies. Mark one returned to see its home shelf. Checkout and return events appear in the copy's history.
 
 In **Bookstore mode**, use **Add a wish** to record the title, author, edition you want and why. Mark a book found while shopping. Select **Show found books** to edit it or put it back on the list. Purchases can be cataloged separately using **Add a physical copy**. Loans and wishes travel with the JSON backup and private family sync. Use the updated app on all participating devices.
+
+## Scan actions, shelf locations and recommendations
+
+After a scan, use **That’s my copy** to choose the physical edition to update, or **Add as new copy** to review prefilled catalog fields. Wish-list results show the requested edition and reason. An optional wanted ISBN confirms an exact edition match.
+
+Open a copy to find its Pretty Side cubby, add cover, spine or sprayed-edge photos, or recommend it to a named reader. Each reader’s profile shows personal picks and the volume following their latest finished numbered book in a series. Where a confirmed omnibus contains that volume, the link opens the physical omnibus. Personal picks travel with family sync and JSON backups. Photos are stored in IndexedDB on the device and can be downloaded individually from the copy detail.
+
+Open the hosted app online at least once on each device. Once Bookstore mode says **Ready for offline browsing**, the library, wish list and local ISBN matching can be reopened offline. Save unfamiliar ISBNs for later and use **Look up** after reconnecting. Saved ISBNs stay on that device. The service worker caches only the app, styles and baseline catalog under the library URL.
